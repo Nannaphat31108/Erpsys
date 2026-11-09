@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ร้านเฟอร์นิเจอร์ไม้สัก ERP</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body class="teak">
+<aside class="sidebar">
+  <div class="brand">Teak <span>Furniture</span></div>
+  <nav id="nav"></nav>
+  <a class="switch" href="/">← DeskHop ERP</a>
+</aside>
+<main>
+  <header class="topbar">
+    <h1 id="page-title">แดชบอร์ด</h1>
+    <button id="add-btn" class="btn primary" hidden>+ เพิ่มรายการ</button>
+  </header>
+  <section id="content"></section>
+</main>
+<dialog id="dlg">
+  <form id="dlg-form" method="dialog">
+    <h2 id="dlg-title"></h2>
+    <div id="dlg-fields" class="fields"></div>
+    <p id="dlg-error" class="error"></p>
+    <div class="actions">
+      <button type="button" class="btn" id="dlg-cancel">ปิด</button>
+      <button type="submit" class="btn primary" id="dlg-save">บันทึก</button>
+    </div>
+  </form>
+</dialog>
+<div id="toast"></div>
+<script src="/teak.js"></script>
+</body>
+</html>

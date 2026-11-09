@@ -9,9 +9,12 @@ import os
 import re
 import sqlite3
 import sys
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
+
+import teak
+from common import ApiError, now_iso, rows
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
@@ -135,26 +138,13 @@ NUMERIC = {"bts_walk_min", "hourly_rate", "expected_min_spend", "wifi_mbps", "co
            "booking_id", "rating", "photos_updated", "staff_briefed"}
 
 
-class ApiError(Exception):
-    def __init__(self, message, status=400):
-        super().__init__(message)
-        self.status = status
-
-
-def now_iso():
-    return datetime.now().replace(microsecond=0).isoformat(sep=" ")
-
-
 def connect(db_path):
     conn = sqlite3.connect(db_path, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     conn.executescript(SCHEMA)
+    conn.executescript(teak.SCHEMA)
     return conn
-
-
-def rows(cur):
-    return [dict(r) for r in cur.fetchall()]
 
 
 def to_minutes(hhmm):
@@ -458,6 +448,7 @@ class ERP:
 
 
 def seed(conn):
+    teak.seed(conn)
     erp = ERP(conn)
     if conn.execute("SELECT COUNT(*) FROM venues").fetchone()[0]:
         return
@@ -520,6 +511,8 @@ MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; cha
 
 
 def make_handler(erp):
+    teak_erp = teak.TeakERP(erp.conn)
+
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, fmt, *args):  # quieter logs
             pass
@@ -552,6 +545,9 @@ def make_handler(erp):
                     raise ApiError("Not found", 404)
                 return self._static(url.path)
             parts = parts[1:]
+            if parts and parts[0] == "teak":
+                status, payload = teak_erp.route(method, parts[1:], self._body)
+                return self._send(status, payload)
             if parts == ["dashboard"] and method == "GET":
                 return self._send(200, erp.dashboard())
             if parts == ["meta"] and method == "GET":

@@ -8,6 +8,7 @@ import json
 import os
 import re
 import sqlite3
+import sys
 from datetime import date, datetime, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
@@ -616,9 +617,11 @@ def main():
     ap.add_argument("--host", default=os.environ.get("HOST", "0.0.0.0" if "PORT" in os.environ else "127.0.0.1"))
     ap.add_argument("--db", default=os.environ.get("DB_PATH", os.path.join(BASE_DIR, "deskhop.db")))
     ap.add_argument("--seed", action="store_true", help="load demo data if the database is empty")
-    args = ap.parse_args()
+    # Tolerate "—seed" / "–seed" when "--" was auto-converted to a dash character.
+    argv = [re.sub(r"^[\u2012\u2013\u2014\u2015]+", "--", a) for a in sys.argv[1:]]
+    args = ap.parse_args(argv)
     conn = connect(args.db)
-    if args.seed:
+    if args.seed or os.environ.get("SEED", "").lower() in ("1", "true", "yes"):
         seed(conn)
     server = ThreadingHTTPServer((args.host, args.port), make_handler(ERP(conn)))
     print(f"DeskHop ERP running at http://{args.host}:{args.port}")

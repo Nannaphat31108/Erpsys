@@ -38,3 +38,14 @@ app.py            # backend: schema, business logic, REST API, static server
 static/           # frontend (index.html, app.js, style.css)
 tests/test_erp.py # unit + HTTP tests
 ```
+
+## Deploy บน Render
+
+1. เข้า https://dashboard.render.com → **New** → **Blueprint** → เลือก repo นี้ (Render จะอ่าน `render.yaml` ให้เอง)
+   หรือ **New → Web Service** แล้วตั้งค่าเอง: Runtime `Python 3`, Build Command `echo ok`, Start Command `python3 app.py --seed`
+2. กด Deploy แล้วเปิด URL `https://<ชื่อ-service>.onrender.com`
+
+แอปจะอ่าน `PORT` ที่ Render กำหนดให้และรับการเชื่อมต่อที่ `0.0.0.0` อัตโนมัติ
+
+> ⚠️ แพ็กเกจฟรีของ Render ไม่มีดิสก์ถาวร ไฟล์ SQLite จะถูกล้างทุกครั้งที่ redeploy หรือ service หลับแล้วตื่น (ข้อมูลตัวอย่างจะถูกโหลดกลับมาใหม่จาก `--seed`)
+> ถ้าต้องการเก็บข้อมูลถาวร ให้ใช้แพ็กเกจที่เพิ่ม **Persistent Disk** ได้ เช่น mount ที่ `/var/data` แล้วตั้ง env `DB_PATH=/var/data/deskhop.db`

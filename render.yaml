@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: deskhop-erp
+    runtime: python
+    plan: free
+    buildCommand: "echo no dependencies"
+    startCommand: "python3 app.py --seed"
+    healthCheckPath: /api/meta
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"

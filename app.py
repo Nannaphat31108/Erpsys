@@ -612,8 +612,9 @@ def make_handler(erp):
 def main():
     ap = argparse.ArgumentParser(description="DeskHop ERP server")
     ap.add_argument("--port", type=int, default=int(os.environ.get("PORT", 8000)))
-    ap.add_argument("--host", default="127.0.0.1")
-    ap.add_argument("--db", default=os.path.join(BASE_DIR, "deskhop.db"))
+    # On hosts like Render, PORT is set and we must listen on all interfaces.
+    ap.add_argument("--host", default=os.environ.get("HOST", "0.0.0.0" if "PORT" in os.environ else "127.0.0.1"))
+    ap.add_argument("--db", default=os.environ.get("DB_PATH", os.path.join(BASE_DIR, "deskhop.db")))
     ap.add_argument("--seed", action="store_true", help="load demo data if the database is empty")
     args = ap.parse_args()
     conn = connect(args.db)

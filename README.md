@@ -39,6 +39,21 @@ python3 -m unittest discover -s tests -v   # รันชุดทดสอบ
 
 API อยู่ใต้ `/api/teak/{products|materials|purchases|suppliers|customers|orders|payments|production}` และ `/api/teak/dashboard`
 
+## ระบบที่ 3: ร้านหม่าล่า ทังทังซุป (`/mala.html`, โทนแดงดำ)
+
+| เมนู | ทำอะไร |
+|---|---|
+| **แดชบอร์ด** | ยอดขาย/บิล/กำไรวันนี้และเดือนนี้, มูลค่ารับเข้า, ของเสีย, มูลค่าสต็อก, ยอดขาย 7 วัน, ไม้ขายดี, ยอดตามช่องทาง (หน้าร้าน/Grab/LINE MAN), รายการต้องสั่ง, ผู้สมัครงาน |
+| **ขายสินค้า (POS)** | กดเลือกไม้/เครื่องดื่มเป็นปุ่ม, ปรับจำนวน, ส่วนลด, ช่องทาง, การชำระเงิน แล้วตัดสต็อกทันที (ขายเกินคงเหลือไม่ได้) |
+| **รับสินค้าเข้า** | บันทึกของเข้า, สต็อกเพิ่มเอง, คิดต้นทุนถัวเฉลี่ย, ยกเลิกล็อตที่ยังไม่ถูกขายได้ |
+| **สินค้าขายไป** | ประวัติบิล, ดูรายละเอียดบิล, ยกเลิกบิล (คืนของเข้าสต็อก) |
+| **สินค้าคงเหลือ** | คงเหลือ, สถานะ ปกติ/ใกล้หมด/หมด, จุดสั่งซื้อ, สต็อกเต็ม, ยอดขาย 7 วัน, ทุน, ราคาขาย, มูลค่า |
+| **สินค้าต้องสั่งเพิ่ม** | รายการที่ถึงจุดสั่งซื้อ แยกตามร้านที่ซื้อ, จำนวนแนะนำ, ประมาณการค่าใช้จ่าย, ปุ่มคัดลอกรายการส่ง LINE, ปุ่ม “รับเข้าแล้ว” |
+| **ของเสีย / ปรับยอด** | ตัดของเสีย หมดอายุ อาหารพนักงาน หรือปรับยอดนับสต็อก |
+| **พนักงาน & รับสมัคร** | ผู้สมัครใหม่ → นัดสัมภาษณ์ → รับเข้าทำงาน / ไม่ผ่าน → ลาออก, ตำแหน่ง, ค่าจ้าง (ชม./วัน/เดือน) |
+
+API อยู่ใต้ `/api/mala/{items|receipts|sales|waste|staff}`, `/api/mala/reorder`, `/api/mala/dashboard`
+
 ## REST API
 
 `GET/POST /api/{venues|desks|customers|bookings|issues|verifications}`
@@ -50,6 +65,7 @@ API อยู่ใต้ `/api/teak/{products|materials|purchases|suppliers|cus
 ```
 app.py            # DeskHop backend + HTTP server/router
 teak.py           # Teak furniture shop backend
+mala.py           # ทังทังซุป mala shop backend
 common.py         # shared helpers
 static/           # frontend (index.html, app.js, style.css)
 tests/            # unit + HTTP tests

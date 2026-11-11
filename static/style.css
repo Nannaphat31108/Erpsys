@@ -54,3 +54,22 @@ body.teak{--accent:#a0612b;--side:#2b1d12;--side-text:#e3d3c2}
 .detail{grid-column:1/-1;font-size:14px}.detail table{margin:6px 0 12px}
 .row-warn td{background:#c5303010}
 @media (max-width:760px){.switch{margin:8px 0 0}.lines .line{grid-template-columns:1fr 70px 90px 32px}}
+/* ทังทังซุป: red & black theme (always dark) */
+body.mala{--bg:#0e0e0f;--card:#18181a;--text:#f3f1f1;--muted:#a59e9e;--line:#2c2a2b;--accent:#e01e26;--accent-ink:#fff;
+--side:#000;--side-text:#d9d4d4;--ok:#3fbf6f;--warn:#f0a020;--bad:#ff4d55;color-scheme:dark}
+body.mala .brand{color:#fff}.brand small{font-size:12px;font-weight:500;color:var(--muted);margin-left:4px}
+body.mala .sidebar{border-right:3px solid var(--accent)}
+body.mala .kpi{border-top:3px solid var(--accent)}
+body.mala .kpi.hot .value{color:var(--bad)}
+.pos{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
+.pos .cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.pos .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:left;color:var(--text);cursor:pointer;font:inherit}
+.tile:hover{border-color:var(--accent)}.tile b{display:block;font-size:14px}.tile .p{color:var(--accent);font-weight:700}
+.tile .s{font-size:12px;color:var(--muted)}.tile[disabled]{opacity:.35;cursor:not-allowed}
+.cart{position:sticky;top:16px}.cart .line{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.cart .qtyc{display:flex;align-items:center;gap:4px}.cart .total{font-size:24px;font-weight:700;color:var(--accent);margin:10px 0}
+.cart select,.cart input{width:100%;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;margin-bottom:6px}
+.btn.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+@media (max-width:900px){.pos{grid-template-columns:1fr}.cart{position:static}}
+th.num{text-align:right}

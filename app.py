@@ -13,6 +13,7 @@ from datetime import date, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
 
+import mala
 import teak
 from common import ApiError, now_iso, rows
 
@@ -144,6 +145,7 @@ def connect(db_path):
     conn.execute("PRAGMA foreign_keys = ON")
     conn.executescript(SCHEMA)
     conn.executescript(teak.SCHEMA)
+    conn.executescript(mala.SCHEMA)
     return conn
 
 
@@ -449,6 +451,7 @@ class ERP:
 
 def seed(conn):
     teak.seed(conn)
+    mala.seed(conn)
     erp = ERP(conn)
     if conn.execute("SELECT COUNT(*) FROM venues").fetchone()[0]:
         return
@@ -512,6 +515,7 @@ MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; cha
 
 def make_handler(erp):
     teak_erp = teak.TeakERP(erp.conn)
+    mala_erp = mala.MalaERP(erp.conn)
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, fmt, *args):  # quieter logs
@@ -545,8 +549,9 @@ def make_handler(erp):
                     raise ApiError("Not found", 404)
                 return self._static(url.path)
             parts = parts[1:]
-            if parts and parts[0] == "teak":
-                status, payload = teak_erp.route(method, parts[1:], self._body)
+            if parts and parts[0] in ("teak", "mala"):
+                mod = teak_erp if parts[0] == "teak" else mala_erp
+                status, payload = mod.route(method, parts[1:], self._body)
                 return self._send(status, payload)
             if parts == ["dashboard"] and method == "GET":
                 return self._send(200, erp.dashboard())
